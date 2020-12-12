@@ -38,6 +38,7 @@ tone \
 # pitchshifter
 # whitenoise
 # polypluck
+# firfilter
 
 # TODO: Consider making this work for PCs as well?
 
@@ -60,6 +61,13 @@ SOURCES_DIR =  \
 
 # Build path
 BUILD_DIR = build
+
+# libdaisy path 
+LIBDAISY_DIR  = ../libdaisy
+SYSTEM_FILES_DIR = $(LIBDAISY_DIR)/core
+# CMSIS path (required only for ARM targets)
+CMSIS_DIR = $(LIBDAISY_DIR)/Drivers/CMSIS
+
 
 ######################################
 # source
@@ -123,17 +131,38 @@ AS_DEFS =
 # C defines
 C_DEFS =  \
 -DUSE_HAL_DRIVER \
+-DARM_MATH_CM7 \
+-DCORE_CM7  \
 -DSTM32H750xx \
--DUSE_HAL_DRIVER \
--DSTM32H750xx
+
+
+
+AS_INCLUDES = 
 
 C_INCLUDES = \
 -I. \
 
+
+ifneq ($(CMSIS_DIR),)
+C_INCLUDES += 	-I$(CMSIS_DIR)/Include/ \
+				-I$(CMSIS_DIR)/DSP/Include/ \
+				-I$(CMSIS_DIR)/Device/ST/STM32H7xx/Include/	\
+                -I$(SYSTEM_FILES_DIR)/   \
+                -I$(LIBDAISY_DIR)/Drivers/STM32H7xx_HAL_Driver/Inc/  \
+
+# Expose platform configuration to all compilation units (CMSIS DSP components)
+C_INCLUDES += -include stm32h7xx.h
+
+# FIR Filter (TODO: compile only on ARM platforms)				
+C_SOURCES += $(CMSIS_DIR)/DSP/Source/FilteringFunctions/arm_fir_f32.c   \
+			 $(CMSIS_DIR)/DSP/Source/FilteringFunctions/arm_fir_init_f32.c  
+
+endif
+
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -Werror -fdata-sections -ffunction-sections
+CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -Werror -fasm -fdata-sections -ffunction-sections
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -145,6 +174,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)"
 CPPFLAGS = $(CFLAGS)
 CPPFLAGS += \
 -fno-exceptions \
+-fasm \
 -finline-functions
 
 #######################################
