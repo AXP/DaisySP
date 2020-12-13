@@ -4,7 +4,9 @@
 #ifndef DSY_CORE_DSP
 #define DSY_CORE_DSP
 #include <math.h>
+#include <stdint.h>
 #include <cassert>
+#include <tuple>
 
 /** PIs
 */
@@ -188,11 +190,11 @@ inline float soft_saturate(float in, float thresh)
     //                                    + (((val - thresh) / (1.0f - thresh))
     //                                       * ((val - thresh) / (1.0f - thresh))));
 }
-constexpr bool is_power2(uint32_t x)
+constexpr inline bool is_power2(uint32_t x)
 {
     return ((x - 1) & x) == 0;
 }
-constexpr uint32_t get_next_power2(uint32_t x)
+constexpr inline uint32_t get_next_power2(uint32_t x)
 {
     x--;
     x |= x >> 1;
@@ -204,6 +206,37 @@ constexpr uint32_t get_next_power2(uint32_t x)
 
     assert(is_power2(x));
     return x;
+}
+
+// dumb straightforward implementation, inteded only for constexpr usage, e.g. in enums and other compile-time constants.
+constexpr inline uint32_t get_base_2(uint32_t x)
+{
+    assert(is_power2(x));
+    for (uint32_t i = 0; i < sizeof(x) * 8; i++)
+    {
+        if (x & 0x01)
+        {
+            assert(0 == (x >> 1)); // no more bits set
+            return i;
+        }
+        x >>= 1;
+    }
+    return 0;
+}
+
+template <typename Tuple, typename F, std::size_t ...Indices>
+void for_each_impl(Tuple&& tuple, F&& f, std::index_sequence<Indices...>) {
+    using swallow = int[];
+    (void)swallow{1,
+        (f(std::get<Indices>(std::forward<Tuple>(tuple))), void(), int{})...
+    };
+}
+
+template <typename Tuple, typename F>
+void for_each(Tuple&& tuple, F&& f) {
+    constexpr std::size_t N = std::tuple_size<std::remove_reference_t<Tuple>>::value;
+    for_each_impl(std::forward<Tuple>(tuple), std::forward<F>(f),
+                  std::make_index_sequence<N>{});
 }
 
 } // namespace daisysp

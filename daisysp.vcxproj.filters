@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="modules\adenv.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\adsr.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\allpass.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\atone.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\autowah.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\balance.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\biquad.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\bitcrush.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\blosc.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\comb.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\compressor.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\crossfade.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\dcblock.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\decimator.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\drip.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\fastconv.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\fft.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\fold.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\jitter.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\limiter.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\line.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\metro.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\mode.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\moogladder.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\nlfilt.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\oscillator.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\phasor.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\pluck.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\port.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\reverbsc.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\svf.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\tone.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="modules\adenv.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\adsr.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\allpass.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\atone.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\autowah.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\balance.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\biquad.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\bitcrush.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\blosc.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\comb.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\compressor.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\constvar.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\crossfade.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\dcblock.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\decimator.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\delayline.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\drip.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\dsp.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\fastconv.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\fastconv_plan.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\fft.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\fft_tables.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\firfilter.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\fold.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\jitter.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\limiter.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\line.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\maytrig.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\metro.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\mode.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\moogladder.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\nlfilt.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\oscillator.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\phasor.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\pitchshifter.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\pluck.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\PolyPluck.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\port.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\reverbsc.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\samplehold.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\svf.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\tone.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\whitenoise.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\def.h">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTReal.h">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTReal.hpp">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealFixLen.h">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealFixLen.hpp">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealFixLenParam.h">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealPassDirect.h">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealPassDirect.hpp">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealPassInverse.h">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealPassInverse.hpp">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealSelect.h">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealSelect.hpp">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealUseTrigo.h">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\FFTRealUseTrigo.hpp">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\OscSinCos.h">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ffft\OscSinCos.hpp">
+      <Filter>modules\ffft</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\fftfilter.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="stm32.props" />
+    <None Include="daisysp-Debug.vgdbsettings" />
+    <None Include="daisysp-Release.vgdbsettings" />
+    <None Include="stm32.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="modules">
+      <UniqueIdentifier>{10a626f7-2334-4e09-bf86-d37f16310ff5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\ffft">
+      <UniqueIdentifier>{5542f44b-e9be-4432-aaf9-67bc9a4f0300}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

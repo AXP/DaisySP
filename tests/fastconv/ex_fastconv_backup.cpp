@@ -59,9 +59,9 @@ static float DSY_SDRAM_BSS data_ir[4096];
 
 static float DSY_SDRAM_BSS data_tmp[4096 * 1];
 
-FastConv<128> DSY_SDRAM_BSS DUT;
+FastConv<4096> DSY_SDRAM_BSS DUT;
 
-static const char* str_res[] = {"FAIL", "PASS"};
+static char* str_res[] = {"FAIL", "PASS"};
 #define FFT_LEN(_i) (32 << (_i))
 
 
@@ -132,22 +132,10 @@ static bool verify_fastconv_single(float* filter, size_t filter_length, size_t s
 
         // apply fast convolution (process several times to find the minimal processing time due to IRQ variance)
         const uint32_t t0 = dsy_tim_get_tick();
-#if 0
         for (size_t i = 0; i < signal_length; i++)
         {
             data_out[i] = DUT.Process(data_in[i]);  // process sample by sample
         }
-#else
-        for (i = 0; i < signal_length; i += fir_block)
-        {
-            DUT.ProcessBlock(&data_in[i], &data_out[i], fir_block);    // process whole blocks
-        }
-        if (i < signal_length)
-        {
-            DUT.ProcessBlock(&data_in[i], &data_out[i], signal_length - i);    // process whatever is left over
-        }
-
-#endif
         dt = dsy_tim_get_tick() - t0;
     }
 
@@ -178,7 +166,7 @@ static bool profile_fastconv_single(float* filter, size_t filter_length, size_t 
 {
     assert(DSY_COUNTOF(data_in) <= DSY_COUNTOF(data_out));
     assert(signal_length <= DSY_COUNTOF(data_in));
-    const size_t fir_block = 256;   // used only for reference FIR processing
+
     // for profiling only the input data doesn't matter so its generation is omitted for speed 
 
     DUT.SetIR(filter, filter_length);
@@ -193,23 +181,10 @@ static bool profile_fastconv_single(float* filter, size_t filter_length, size_t 
         {
             DUT.Reset();
             const uint32_t t0 = dsy_tim_get_tick();
-#if 0
             for (size_t i = 0; i < signal_length; i++)
             {
                 data_out[i] = DUT.Process(data_in[i]);
             }
-
-#else
-            size_t i;
-            for (i = 0; i < signal_length; i += fir_block)
-            {
-                DUT.ProcessBlock(&data_in[i], &data_out[i], fir_block);    // process whole blocks
-            }
-            if (i < signal_length)
-            {
-                DUT.ProcessBlock(&data_in[i], &data_out[i], signal_length - i);    // process whatever is left over
-            }
-#endif
             const uint32_t dt = dsy_tim_get_tick() - t0;
             dt_min = DSY_MIN(dt_min, dt);
             dt_max = DSY_MAX(dt_max, dt);
@@ -241,14 +216,12 @@ static void verify_fastconv()
     {
         const size_t filter_length = list[i];
 //        pass &= verify_fastconv_single(data_ir, filter_length, filter_length*4);
-    if (filter_length <= 64)
         pass &= verify_fastconv_single(data_ir, filter_length, DSY_COUNTOF(data_in));
     }
 #endif
 
     for (size_t filter_length = 32; filter_length <= 2048; filter_length *= 2)
     {
-        if (filter_length <= 64)
         pass &= profile_fastconv_single(data_ir, filter_length, DSY_COUNTOF(data_in) - 1);  // one less to avoid calculating FFT for the next chunk
     }
 
