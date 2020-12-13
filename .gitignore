@@ -116,6 +116,7 @@ LLVM/
 .ipynb_checkpoints/
 transcode report.txt
 /build
+/tests/*/build
 /examples/*/build
 /doc/*.md
 /doc/html/

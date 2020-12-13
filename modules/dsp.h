@@ -5,6 +5,7 @@
 #define DSY_CORE_DSP
 #include <math.h>
 #include <cassert>
+#include <cstdint>
 
 /** PIs
 */

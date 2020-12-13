@@ -33,7 +33,7 @@
 #include "modules/delayline.h"
 #include "modules/drip.h"
 #include "modules/dsp.h"
-#include "modules/fastconv.h"
+#include "modules/firfilter.h"
 #include "modules/fold.h"
 #include "modules/jitter.h"
 #include "modules/limiter.h"
