@@ -1,9 +1,7 @@
 #include "daisysp.h"
-#include "daisy_seed.h"
-#include "daisy_pod.h"
-
-#include "util/scopedirqblocker.h"
 #include "test_util.h"
+#include "util/scopedirqblocker.h"
+
 
 using namespace daisysp;
 using namespace daisy;
