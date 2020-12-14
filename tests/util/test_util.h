@@ -13,12 +13,12 @@
 
 namespace daisy
 {
-    /* alias everything as DaisyPC on Windows */
-    using DaisySeed = DaisyPC;
-    using DaisyPod  = DaisyPC;
-}
+/* alias everything as DaisyPC on Windows */
+using DaisySeed = DaisyPC;
+using DaisyPod  = DaisyPC;
+} // namespace daisy
 
-#else 
+#else
 #include "daisy_seed.h"
 #include "daisy_pod.h"
 
@@ -30,12 +30,8 @@ namespace daisy
  */
 
 
-
-
 namespace daisysp
 {
-
-
 /** Compile-time loop
  * The iteration is applied to the template class Fn, via functor ()
  * since direct usage of template function as template parameter is 
@@ -63,15 +59,15 @@ namespace daisysp
 template <size_t from, size_t to>
 struct static_for
 {
-    template<template<size_t> class Fn>
-    static bool go_bool() 
+    template <template <size_t> class Fn>
+    static bool go_bool()
     {
         bool ret = Fn<from>()();
         ret &= static_for<from + 1, to>::template go_bool<Fn>();
         return ret;
     }
 
-    template<template<size_t> class Fn>
+    template <template <size_t> class Fn>
     static void go()
     {
         Fn<from>()();
@@ -81,61 +77,63 @@ struct static_for
 
 /* Static loop - Termination */
 template <size_t to>
-struct static_for<to, to> 
+struct static_for<to, to>
 {
-    template<template<size_t> class Fn>
-    static bool go_bool() {return true;}
+    template <template <size_t> class Fn>
+    static bool go_bool()
+    {
+        return true;
+    }
 
-    template<template<size_t> class Fn>
-    static void go() {  }
+    template <template <size_t> class Fn>
+    static void go()
+    {
+    }
 };
 
 /** Wrapper class for test utilities. 
  * DaisySeed and DaisyPod hw_type values are currently supported on ARM
  * and DaisyPC on Windows
  */
-template<typename hw_type>
+template <typename hw_type>
 class DsyTestHelper
 {
-public:
-    DsyTestHelper()
-    {
-    }
-    ~DsyTestHelper()
-    {
-    }
-    
-    
-    void Prepare();
-    void Finish(bool result);
+  public:
+    DsyTestHelper() {}
+    ~DsyTestHelper() {}
+
+
+    void              Prepare();
+    void              Finish(bool result);
     daisy::DaisySeed& GetSeed();
 
-    static constexpr auto Print = daisy::DaisySeed::Log::Print;
+    static constexpr auto Print     = daisy::DaisySeed::Log::Print;
     static constexpr auto PrintLine = daisy::DaisySeed::Log::PrintLine;
 
     static void GenerateSignal(float* buf, size_t length)
     {
         assert(nullptr != buf);
 
-        if (nullptr != buf)
+        if(nullptr != buf)
         {
             WhiteNoise nse;
             nse.Init();
             nse.SetAmp(1.0f);
-            
-            for (size_t i = 0; i < length; i++)
+
+            for(size_t i = 0; i < length; i++)
             {
                 buf[i] = nse.Process();
             }
         }
     }
-    static float CalcMSEdB(float * __restrict  pSrcA, float* __restrict  pSrcB, size_t length)
+    static float
+    CalcMSEdB(float* __restrict pSrcA, float* __restrict pSrcB, size_t length)
     {
         /* prone to error accumulation, so use double */
-        double sum_error(0); 
-        for (size_t i = 0; i < length; i++)
+        double sum_error(0);
+        for(size_t i = 0; i < length; i++)
         {
-            if (isnanf(pSrcA[i]) || isnanf(pSrcB[i]))
+            if(isnanf(pSrcA[i]) || isnanf(pSrcB[i]))
             {
                 return 200.0f;
             }
@@ -145,14 +143,14 @@ public:
         sum_error /= length;
 
         /* cap at -200dB */
-        sum_error = DSY_MAX(sum_error, 1.0e-20);    
-        
+        sum_error = DSY_MAX(sum_error, 1.0e-20);
+
         /* convert to dB (square root operation is factored in) */
-        const float rms = 10.0f * fastlog10f((float)sum_error); 
+        const float rms = 10.0f * fastlog10f((float)sum_error);
 
         return rms;
     }
-    template<int N>
+    template <int N>
     static constexpr size_t FindMax(const size_t (&arr)[N])
     {
         size_t max_value(0);
@@ -167,15 +165,16 @@ public:
     {
         return str_res_[result];
     }
-protected:
-    hw_type hw_;
+
+  protected:
+    hw_type                      hw_;
     static constexpr const char* str_res_[] = {"FAIL", "PASS"};
 }; // class DsyTestHelper
 
-template<typename hw_type>
+template <typename hw_type>
 constexpr const char* DsyTestHelper<hw_type>::str_res_[];
 
-#if defined(__arm__)    // TODO: define a better suited symbol
+#if defined(__arm__) // TODO: define a better suited symbol
 
 /* Specialization for DaisySeed */
 template <>
@@ -221,7 +220,7 @@ void DsyTestHelper<daisy::DaisyPod>::Finish(bool result)
     PrintLine("Done: %s", ResultStr(result));
     daisy::Color led_result;
 
-    if (result)
+    if(result)
     {
         led_result.Init(daisy::Color::GREEN);
     }
@@ -240,7 +239,7 @@ daisy::DaisySeed& DsyTestHelper<daisy::DaisyPod>::GetSeed()
     return hw_.seed;
 }
 
-#elif defined (_WIN32)
+#elif defined(_WIN32)
 
 template <>
 void DsyTestHelper<daisy::DaisyPC>::Prepare()

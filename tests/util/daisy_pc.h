@@ -21,15 +21,14 @@
 constexpr auto isnanf = _isnanf;
 
 /* no need for specific allocation */
-#define DSY_SDRAM_BSS   /* emtpy */
+#define DSY_SDRAM_BSS /* emtpy */
 
 namespace daisy
 {
-
 /* Stub for blocking interrupts, ignore on Windows*/
 class ScopedIrqBlocker
 {
-public:
+  public:
     ScopedIrqBlocker() { (void)0; }
     ~ScopedIrqBlocker() { (void)0; }
 };
@@ -46,7 +45,7 @@ uint32_t dsy_tim_get_ticks_per_us()
     LARGE_INTEGER q;
     QueryPerformanceFrequency(&q);
     /* use division with rounding */
-    uint32_t us = (uint32_t)((q.QuadPart + 500000) / 1000000); 
+    uint32_t us = (uint32_t)((q.QuadPart + 500000) / 1000000);
     return us;
 }
 
@@ -57,24 +56,20 @@ uint32_t dsy_tim_get_ticks_per_us()
 
 class DaisyPC
 {
-public:
-    DaisyPC()
-    {}
-    ~DaisyPC()
-    {}
+  public:
+    DaisyPC() {}
+    ~DaisyPC() {}
     /* redirect the log to stdout */
     using Log = daisy::Logger<daisy::LOGGER_SEMIHOST>;
 
     /* Import logging functions */
-    static constexpr auto Print = Log::Print;
+    static constexpr auto Print     = Log::Print;
     static constexpr auto PrintLine = Log::PrintLine;
 
-    static void StartLog(bool wait_for_pc = false)
-    {
-    }
+    static void StartLog(bool wait_for_pc = false) {}
 };
 
-} // namespace daisysp
+} // namespace daisy
 
 #endif // _WIN32
 

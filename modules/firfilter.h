@@ -6,7 +6,7 @@
 #include <cstring> // for memset
 
 #ifdef __arm__
-#include <arm_math.h>   // required for platform-optimized version
+#include <arm_math.h> // required for platform-optimized version
 #endif
 
 #include "dsp.h"
@@ -18,7 +18,6 @@
 
 namespace daisysp
 {
-
 /* use this as a template parameter to indicate user-provided memory storage */
 #define FIRFILTER_USER_MEMORY 0, 0
 
@@ -35,28 +34,17 @@ namespace daisysp
 template <size_t max_size, size_t max_block>
 struct FIRMemory
 {
-
-  /* Public part of the API to be passed through to the FIRFilter user */
+    /* Public part of the API to be passed through to the FIRFilter user */
   public:
     /* Reset the internal filter state (but not the coefficients) */
-    void Reset()
-    {
-        memset(state_, 0, state_size_ * sizeof(state_[0]));
-    }
+    void Reset() { memset(state_, 0, state_size_ * sizeof(state_[0])); }
 
 
-protected:
-    FIRMemory()
-    :   state_{0}
-    ,   coefs_{0}
-    ,   size_(0)
-    {}
+  protected:
+    FIRMemory() : state_{0}, coefs_{0}, size_(0) {}
 
     /* Expression for the maximum block size */
-    static constexpr size_t MaxBlock()
-    {
-        return max_block;
-    }
+    static constexpr size_t MaxBlock() { return max_block; }
 
     /** Configure the filter coefficients
      * \param coefs - pointer to coefficients (tail-first order)
@@ -69,12 +57,13 @@ protected:
         /* truncate silently */
         size_ = DSY_MIN(size, max_size);
 
-        if (reverse)
-        {   
+        if(reverse)
+        {
             /* reverse the IR */
-            for (size_t i = 0; i < size_; i++)
+            for(size_t i = 0; i < size_; i++)
             {
-                coefs_[i] = coefs[size-1u - i]; /*< start from size, not size_! */
+                /* start from size, not size_! */
+                coefs_[i] = coefs[size - 1u - i];
             }
         }
         else
@@ -87,16 +76,16 @@ protected:
     }
 
     static constexpr size_t state_size_ = max_size + max_block - 1u;
-    float state_[state_size_]; /*< Internal state buffer */
-    float coefs_[max_size];    /*< Filter coefficients */
-    size_t size_;              /*< Active filter length (<= max_size) */
+    float                   state_[state_size_]; /*< Internal state buffer */
+    float                   coefs_[max_size];    /*< Filter coefficients */
+    size_t                  size_; /*< Active filter length (<= max_size) */
 };
 
 /* Specialization for user-provided memory */
-template<>
+template <>
 struct FIRMemory<FIRFILTER_USER_MEMORY>
 {
-  /* Public part of the API to be passed through to the FIRFilter user */
+    /* Public part of the API to be passed through to the FIRFilter user */
   public:
     /** Set user-provided state buffer
      * \param state - pointer to the allocated memory block
@@ -104,9 +93,9 @@ struct FIRMemory<FIRFILTER_USER_MEMORY>
      * The length should be determined as follows 
      * length >= max_filter_size + max_processing_block - 1
      */
-    void SetStateBuffer(float state[], size_t length) 
+    void SetStateBuffer(float state[], size_t length)
     {
-        state_ = state;
+        state_      = state;
         state_size_ = length;
     }
     /* Reset the internal filter state (but not the coefficients) */
@@ -114,26 +103,21 @@ struct FIRMemory<FIRFILTER_USER_MEMORY>
     {
         assert(nullptr != state_);
         assert(0 != state_size_);
-        if (nullptr != state_)
+        if(nullptr != state_)
         {
             memset(state_, 0, state_size_ * sizeof(state_[0]));
         }
     }
 
-protected:
-    FIRMemory()
-    : state_(nullptr)
-    , coefs_(nullptr)
-    , size_(0)
-    , state_size_(0)
-    {}
+  protected:
+    FIRMemory() : state_(nullptr), coefs_(nullptr), size_(0), state_size_(0) {}
 
     /* Expression for the maximum processing block size currently supported */
     size_t MaxBlock() const
     {
         return state_size_ + 1u > size_ ? state_size_ + 1u - size_ : 0;
     }
-    
+
     /** Configure the filter coefficients
      * \param coefs - pointer to coefficients (tail-first order)
      * \param size - number of coefficients pointed by coefs (filter length)
@@ -142,25 +126,26 @@ protected:
      */
     bool SetCoefs(const float coefs[], size_t size, bool reverse)
     {
+        /* reversing of external IR is not supported*/
+        assert(false == reverse);
         assert(nullptr != coefs || 0 == size);
-        assert(false == reverse); /*< reversing of external IR is not supported*/
 
-        if (false == reverse && (nullptr != coefs || 0 == size))
+        if(false == reverse && (nullptr != coefs || 0 == size))
         {
             coefs_ = coefs;
-            size_ = size;
+            size_  = size;
             return true;
         }
 
         return false;
     }
 
-/* Internal member variables */
+    /* Internal member variables */
 
-    float* state_;       /*< Internal state buffer */
-    const float* coefs_; /*< Filter coefficients */
-    size_t size_;        /*< number of filter coefficients */
-    size_t state_size_;  /*< length of the state buffer */
+    float*       state_;      /*< Internal state buffer */
+    const float* coefs_;      /*< Filter coefficients */
+    size_t       size_;       /*< number of filter coefficients */
+    size_t       state_size_; /*< length of the state buffer */
 };
 
 
@@ -173,16 +158,14 @@ protected:
  * Otherwise statically allocates the necessary buffers itself
  */
 template <size_t max_size, size_t max_block>
-class FIRFilterImplGeneric: public FIRMemory<max_size, max_block>
+class FIRFilterImplGeneric : public FIRMemory<max_size, max_block>
 {
   private:
     using FIRMem = FIRMemory<max_size, max_block>; // just a shorthand
 
   public:
     /* Default constructor */
-    FIRFilterImplGeneric()
-    {        
-    }
+    FIRFilterImplGeneric() {}
 
     /* Reset filter state (but not the coefficients) */
     using FIRMem::Reset;
@@ -199,7 +182,7 @@ class FIRFilterImplGeneric: public FIRMemory<max_size, max_block>
 
         /* Convolution loop */
         float acc(0);
-        for (size_t i = 0; i < size_ - 1; i++)
+        for(size_t i = 0; i < size_ - 1; i++)
         {
             acc += state_[i] * coefs_[i];
             /** Shift the state simulatenously 
@@ -222,14 +205,14 @@ class FIRFilterImplGeneric: public FIRMemory<max_size, max_block>
         assert(nullptr != pDst);
 
         /* Process the block of data */
-        for (size_t j = 0; j < block; j++)
+        for(size_t j = 0; j < block; j++)
         {
             /* Feed data into the buffer */
             state_[size_ - 1u + j] = pSrc[j];
 
             /* Convolution loop */
             float acc = 0.0f;
-            for (size_t i = 0; i < size_; i++)
+            for(size_t i = 0; i < size_; i++)
             {
                 acc += state_[j + i] * coefs_[i];
             }
@@ -239,7 +222,7 @@ class FIRFilterImplGeneric: public FIRMemory<max_size, max_block>
         }
 
         /* Copy data tail for the next block */
-        for (size_t i = 0; i < size_ - 1u; i++)
+        for(size_t i = 0; i < size_ - 1u; i++)
         {
             state_[i] = state_[block + i];
         }
@@ -253,18 +236,16 @@ class FIRFilterImplGeneric: public FIRMemory<max_size, max_block>
     bool SetIR(const float* ir, size_t len, bool reverse)
     {
         /* Function order is important */
-        const bool result = FIRMem::SetCoefs(ir, len, reverse);    
-        Reset();    
+        const bool result = FIRMem::SetCoefs(ir, len, reverse);
+        Reset();
         return result;
     }
 
   protected:
-    using FIRMem::state_; /*< FIR state buffer or pointer */ 
-    using FIRMem::coefs_; /*< FIR coefficients buffer or pointer */ 
-    using FIRMem::size_;  /*< FIR length*/ 
+    using FIRMem::coefs_; /*< FIR coefficients buffer or pointer */
+    using FIRMem::size_;  /*< FIR length*/
+    using FIRMem::state_; /*< FIR state buffer or pointer */
 };
-
-
 
 
 #ifdef __arm__
@@ -277,17 +258,14 @@ class FIRFilterImplGeneric: public FIRMemory<max_size, max_block>
  * Otherwise statically allocates the necessary buffers
  */
 template <size_t max_size, size_t max_block>
-class FIRFilterImplARM: public FIRMemory<max_size, max_block>
+class FIRFilterImplARM : public FIRMemory<max_size, max_block>
 {
   private:
     using FIRMem = FIRMemory<max_size, max_block>; // just a shorthand
 
   public:
     /* Default constructor */
-    FIRFilterImplARM()
-    :   fir_{0}
-    {
-    }
+    FIRFilterImplARM() : fir_{0} {}
 
     /* Reset filter state (but not the coefficients) */
     using FIRMem::Reset;
@@ -325,31 +303,30 @@ class FIRFilterImplARM: public FIRMemory<max_size, max_block>
 
   protected:
     arm_fir_instance_f32 fir_; /*< ARM CMSIS DSP library FIR filter instance */
-    using FIRMem::state_;      /*< FIR state buffer or pointer */ 
-    using FIRMem::coefs_;      /*< FIR coefficients buffer or pointer */ 
-    using FIRMem::size_;       /*< FIR length*/ 
+    using FIRMem::coefs_;      /*< FIR coefficients buffer or pointer */
+    using FIRMem::size_;       /*< FIR length*/
+    using FIRMem::state_;      /*< FIR state buffer or pointer */
 };
 
 
 #if FIRFILTER_FORCE_GENERIC
 /* default to generic implementation */
-template<size_t max_size, size_t max_block>
-using FIRFilter = FIRFilterImplGeneric<max_size, max_block>; 
+template <size_t max_size, size_t max_block>
+using FIRFilter = FIRFilterImplGeneric<max_size, max_block>;
 #else
 /* default to ARM implementation */
-template<size_t max_size, size_t max_block>
-using FIRFilter = FIRFilterImplARM<max_size, max_block>; 
+template <size_t max_size, size_t max_block>
+using FIRFilter = FIRFilterImplARM<max_size, max_block>;
 #endif
 
 
 #else // __arm__
 
 /* default to generic implementation */
-template<size_t max_size, size_t max_block>
-using FIRFilter = FIRFilterImplGeneric<max_size, max_block>; 
+template <size_t max_size, size_t max_block>
+using FIRFilter = FIRFilterImplGeneric<max_size, max_block>;
 
-#endif  // __arm__
-
+#endif // __arm__
 
 
 } // namespace daisysp
