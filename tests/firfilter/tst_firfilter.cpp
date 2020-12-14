@@ -1,13 +1,22 @@
 #include "daisysp.h"
 #include "test_util.h"
-#include "util/scopedirqblocker.h"
 
+#if defined(_WIN32)
+
+#else
+#include "util/scopedirqblocker.h"
+#endif
+
+/**   @brief FIR Filter unit tests
+ *    @author Alexander Petrov-Savchenko (axp@soft-amp.com)
+ *    @date December 2020
+ */
 
 using namespace daisysp;
 using namespace daisy;
 
 
-/* Test platform choice, DaisySeed and DaisyPod are currently supported */
+/* Test platform choice, DaisySeed, DaisyPod and DaisyPC are currently supported */
 using TestPlatform = DsyTestHelper<DaisyPod>;
 static TestPlatform hw;
 

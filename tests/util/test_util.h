@@ -1,14 +1,36 @@
+#pragma once
+#ifndef __TEST_UTIL_H__
+#define __TEST_UTIL_H__
+
 #include <cstdint>
 #include <cassert>
 #include <cmath>
 #include <float.h>
 #include "daisysp.h"
+
+#if defined(_WIN32)
+#include "daisy_pc.h"
+
+namespace daisy
+{
+    /* alias everything as DaisyPC on Windows */
+    using DaisySeed = DaisyPC;
+    using DaisyPod  = DaisyPC;
+}
+
+#else 
 #include "daisy_seed.h"
 #include "daisy_pod.h"
 
-#ifdef _WIN32
-constexpr auto isnanf = _isnanf;
 #endif
+
+/**   @brief Utility functions for implementing module unit tests
+ *    @author Alexander Petrov-Savchenko (axp@soft-amp.com)
+ *    @date December 2020
+ */
+
+
+
 
 namespace daisysp
 {
@@ -69,8 +91,8 @@ struct static_for<to, to>
 };
 
 /** Wrapper class for test utilities. 
- * DaisySeed and DaisyPod hw_type values are currently supported.
- * TODO: replace daisy:Logger inheritance with something else
+ * DaisySeed and DaisyPod hw_type values are currently supported on ARM
+ * and DaisyPC on Windows
  */
 template<typename hw_type>
 class DsyTestHelper
@@ -153,8 +175,9 @@ protected:
 template<typename hw_type>
 constexpr const char* DsyTestHelper<hw_type>::str_res_[];
 
-/* Specialization for DaisySeed */
+#if defined(__arm__)    // TODO: define a better suited symbol
 
+/* Specialization for DaisySeed */
 template <>
 void DsyTestHelper<daisy::DaisySeed>::Prepare()
 {
@@ -167,7 +190,7 @@ void DsyTestHelper<daisy::DaisySeed>::Prepare()
 template <>
 void DsyTestHelper<daisy::DaisySeed>::Finish(bool result)
 {
-    hw_.PrintLine("Done: %s", ResultStr(result));
+    PrintLine("Done: %s", ResultStr(result));
     hw_.SetLed(false);
 }
 
@@ -195,7 +218,7 @@ void DsyTestHelper<daisy::DaisyPod>::Prepare()
 template <>
 void DsyTestHelper<daisy::DaisyPod>::Finish(bool result)
 {
-    hw_.seed.PrintLine("Done: %s", ResultStr(result));
+    PrintLine("Done: %s", ResultStr(result));
     daisy::Color led_result;
 
     if (result)
@@ -217,5 +240,28 @@ daisy::DaisySeed& DsyTestHelper<daisy::DaisyPod>::GetSeed()
     return hw_.seed;
 }
 
+#elif defined (_WIN32)
+
+template <>
+void DsyTestHelper<daisy::DaisyPC>::Prepare()
+{
+}
+
+template <>
+void DsyTestHelper<daisy::DaisyPC>::Finish(bool result)
+{
+    PrintLine("Done: %s", ResultStr(result));
+}
+
+template <>
+daisy::DaisySeed& DsyTestHelper<daisy::DaisyPC>::GetSeed()
+{
+    /* this works since DaisySeed is aliased as DaisyPC */
+    return hw_;
+}
+
+#endif
 
 } // namespace daisysp
+
+#endif //__TEST_UTIL_H__

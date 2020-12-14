@@ -2,7 +2,8 @@
 #ifndef DSY_FIRFILTER_H
 #define DSY_FIRFILTER_H
 
-#include <stdint.h>
+#include <cstdint>
+#include <cstring> // for memset
 
 #ifdef __arm__
 #include <arm_math.h>   // required for platform-optimized version

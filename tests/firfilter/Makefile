@@ -4,7 +4,6 @@ TARGET = tst_firfilter
 
 # Sources
 CPP_SOURCES = tst_firfilter.cpp	\
-			
 
 C_INCLUDES = -I./ -I../util/
 
